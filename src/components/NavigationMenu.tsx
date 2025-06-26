@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,7 +10,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { Book, BarChart3, Search, Plus, Home } from "lucide-react";
+import { Book, BarChart3, Search, Plus, Home, Database } from "lucide-react";
 
 interface NavigationMenuProps {
   onNavigate?: (section: string) => void;
@@ -20,6 +21,9 @@ const AppNavigationMenu: React.FC<NavigationMenuProps> = ({
   onNavigate = () => {},
   currentSection = "home",
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleNavigation = (section: string) => {
     onNavigate(section);
     // Scroll to section
@@ -27,6 +31,10 @@ const AppNavigationMenu: React.FC<NavigationMenuProps> = ({
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const handleRouteNavigation = (route: string) => {
+    navigate(route);
   };
 
   return (
@@ -39,64 +47,13 @@ const AppNavigationMenu: React.FC<NavigationMenuProps> = ({
                 className={cn(
                   navigationMenuTriggerStyle(),
                   "cursor-pointer",
-                  currentSection === "home" && "bg-accent",
+                  location.pathname === "/" && "bg-accent",
                 )}
-                onClick={() => handleNavigation("home")}
+                onClick={() => handleRouteNavigation("/")}
               >
                 <Home className="mr-2 h-4 w-4" />
-                Dashboard
+                Basic Manager
               </NavigationMenuLink>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <Book className="mr-2 h-4 w-4" />
-                Comic Books
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid gap-3 p-6 w-[400px]">
-                  <div className="grid gap-1">
-                    <button
-                      className="flex items-center gap-2 p-2 rounded hover:bg-accent text-left"
-                      onClick={() => handleNavigation("search-filter")}
-                    >
-                      <Search className="h-4 w-4" />
-                      <div>
-                        <div className="text-sm font-medium">
-                          Search & Filter
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Find specific comic books
-                        </div>
-                      </div>
-                    </button>
-                    <button
-                      className="flex items-center gap-2 p-2 rounded hover:bg-accent text-left"
-                      onClick={() => handleNavigation("comic-listing")}
-                    >
-                      <Book className="h-4 w-4" />
-                      <div>
-                        <div className="text-sm font-medium">Comic Listing</div>
-                        <div className="text-xs text-muted-foreground">
-                          Browse all comic books
-                        </div>
-                      </div>
-                    </button>
-                    <button
-                      className="flex items-center gap-2 p-2 rounded hover:bg-accent text-left"
-                      onClick={() => handleNavigation("add-comic")}
-                    >
-                      <Plus className="h-4 w-4" />
-                      <div>
-                        <div className="text-sm font-medium">Add New Comic</div>
-                        <div className="text-xs text-muted-foreground">
-                          Add a new comic book
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </NavigationMenuContent>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
@@ -104,12 +61,26 @@ const AppNavigationMenu: React.FC<NavigationMenuProps> = ({
                 className={cn(
                   navigationMenuTriggerStyle(),
                   "cursor-pointer",
-                  currentSection === "statistics" && "bg-accent",
+                  location.pathname === "/advanced" && "bg-accent",
                 )}
-                onClick={() => handleNavigation("statistics")}
+                onClick={() => handleRouteNavigation("/advanced")}
               >
-                <BarChart3 className="mr-2 h-4 w-4" />
-                Statistics
+                <Book className="mr-2 h-4 w-4" />
+                Comic Books
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  "cursor-pointer",
+                  location.pathname === "/entities" && "bg-accent",
+                )}
+                onClick={() => handleRouteNavigation("/entities")}
+              >
+                <Database className="mr-2 h-4 w-4" />
+                All Entities
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
